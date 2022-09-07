@@ -1,7 +1,6 @@
+from const import DEBUG, POSTGRES_PASSWORD
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
-
-from communication.const import DEBUG, POSTGRES_PASSWORD
 
 if DEBUG:
     engine = create_engine("sqlite:///:memory:", echo=True)

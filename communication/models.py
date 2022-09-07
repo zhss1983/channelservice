@@ -1,9 +1,8 @@
 from datetime import date
 
+from db_access import engine
 from sqlalchemy import Boolean, Column, Date, Float, Integer
 from sqlalchemy.ext.declarative import declarative_base
-
-from communication.db_access import engine
 
 Base = declarative_base()
 
@@ -37,5 +36,5 @@ class Order(Base):
         )
 
 
-Base.metadata.drop_all(engine)
+# Base.metadata.drop_all(engine)
 Base.metadata.create_all(engine)

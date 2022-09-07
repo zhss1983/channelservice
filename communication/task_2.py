@@ -2,12 +2,22 @@ from datetime import date, datetime
 
 import requests_cache
 from bs4 import BeautifulSoup
+from const import MY_ID, VALUTE_RCODE, VALUTE_URL
+from db_access import Session
+from google_api import service_sheet
+from google_api.sheets import read_values
+from models import Order
 
-from communication import service_sheet
-from communication.const import MY_ID, VALUTE_RCODE, VALUTE_URL
-from communication.db_access import Session
-from communication.google_api.sheets import read_values
-from communication.models import Order
+DATE_FORMATS = (
+    "%d.%m.%Y",
+    "%d.%m.%y",
+    "%d/%m/%Y",
+    "%d/%m/%y",
+    "%d-%m-%Y",
+    "%d-%m-%y",
+    "%d %b %Y",
+    "%d %b %Y",
+)
 
 
 def get_course(date: date):
@@ -23,17 +33,28 @@ def get_course(date: date):
     return float(value.text.replace(",", "."))
 
 
+def date_converter(date: str) -> date | None:
+    for format in DATE_FORMATS:
+        try:
+            return datetime.strptime(date, format).date()
+        except ValueError:
+            pass  # Залогировать
+
+
 def get_google_order_rep(googlesheet_id):
     result = []
     for item in read_values(service_sheet, googlesheet_id)[1:]:
         if len(item) < 4:
             continue
+        created_on = date_converter(item[3])
+        if created_on is None:
+            continue  # Залогировать что дату перевести не получилось.
         result.append(
             {
                 "number": int(item[0]),
                 "order": int(item[1]),
                 "usd_price": float(item[2]),
-                "created_on": datetime.strptime(item[3], "%d.%m.%Y").date(),
+                "created_on": created_on,
             }
         )
     return result
@@ -60,7 +81,7 @@ def db_update_from_googlesheets(googlesheet_id=MY_ID):
             cur_order["rub_price"] = get_course(date=cur_order["created_on"]) * cur_order["usd_price"]
             change_orders.append(Order(**cur_order))
             position += 1
-        if order.order == google_orders[position]["order"]:
+        if len(google_orders) > position and order.order == google_orders[position]["order"]:
             # Есть и в БД и в Гугл таблицах, обновить или пропустить
             if order.is_same(google_orders[position]):
                 position += 1
@@ -79,4 +100,4 @@ def db_update_from_googlesheets(googlesheet_id=MY_ID):
 
 
 if __name__ == "__main__":
-    main()
+    db_update_from_googlesheets()
