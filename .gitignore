@@ -105,7 +105,6 @@ celerybeat.pid
 .env
 .venv
 env/
-keys/
 venv/
 ENV/
 env.bak/
@@ -128,3 +127,12 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+
+# main exclusions
+keys/
+google_api/
+flask_sqlalchemi/
+pgadmin/
+pgdata/
+postgresql/
