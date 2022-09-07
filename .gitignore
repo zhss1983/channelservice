@@ -131,7 +131,6 @@ dmypy.json
 
 # main exclusions
 keys/
-google_api/
 flask_sqlalchemi/
 pgadmin/
 pgdata/
