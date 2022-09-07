@@ -36,7 +36,7 @@ def date_converter(date: str) -> date | None:
         try:
             return datetime.strptime(date, format).date()
         except ValueError:
-            pass  # Залогировать
+            pass
 
 
 def get_google_order_rep(googlesheet_id):

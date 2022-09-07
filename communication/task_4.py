@@ -14,6 +14,10 @@ def check_overdue():
         session.query(Order).filter(Order.is_active, Order.created_on <= overdue_time).order_by(Order.order)
     )
 
+    if overdue_orders.count() == 0:
+        send_message(f"На текущую дату не имеется просроченных поставок.")
+        return
+
     message = [f"У вас имеется просроченные поставки:\n"]
     rub = usd = 0
     for order in overdue_orders:

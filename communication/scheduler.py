@@ -6,7 +6,7 @@ from db_access import Session
 session = Session()
 
 
-class Sheduler:
+class Scheduler:
     def __init__(self, time: datetime.time = datetime.time(hour=8), is_done=False):
         self.time = time
         self.is_done = is_done

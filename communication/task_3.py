@@ -3,13 +3,13 @@ import asyncio
 
 from const import EVENING_SEND_TIME, MORNING_SEND_TIME, MY_ID, SECOND_UPDATE
 from logger import logger
-from sheduller import Sheduler
+from scheduler import Scheduler
 from task_1 import copy_sheet
 from task_2 import db_update_from_googlesheets, session
 from task_4 import check_overdue
 
-morning_check = Sheduler(time=MORNING_SEND_TIME)
-evening_check = Sheduler(time=EVENING_SEND_TIME)
+morning_check = Scheduler(time=MORNING_SEND_TIME)
+evening_check = Scheduler(time=EVENING_SEND_TIME)
 
 my_id = MY_ID
 
