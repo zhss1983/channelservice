@@ -1,32 +1,30 @@
 from datetime import date, datetime
+from http import HTTPStatus
 
+import requests
 import requests_cache
 from bs4 import BeautifulSoup
-from const import MY_ID, VALUTE_RCODE, VALUTE_URL
+from const import DATE_FORMATS, MY_ID, VALUTE_RCODE, VALUTE_URL
 from db_access import Session
 from google_api import service_sheet
 from google_api.sheets import read_values
+from logger import logger
 from models import Order
 
-DATE_FORMATS = (
-    "%d.%m.%Y",
-    "%d.%m.%y",
-    "%d/%m/%Y",
-    "%d/%m/%y",
-    "%d-%m-%Y",
-    "%d-%m-%y",
-    "%d %b %Y",
-    "%d %b %Y",
+session = requests_cache.CachedSession(
+    cache_name="valute_cache", backend="sqlite", filter_fn=lambda response: response.status_code == HTTPStatus.OK
 )
 
 
-def get_course(date: date):
+def get_course(date: date, session=session):
     """
     Возвращает курс валют по курсу ЦБРФ на указанную дату
     date: дата на которую необходимо получить значение
     """
-    session = requests_cache.CachedSession(cache_name="valute_cache", backend="sqlite")
     response = session.get(VALUTE_URL, params={"date_req": date.strftime("%d/%m/%Y")})
+    if response.status_code > HTTPStatus.BAD_REQUEST:
+        logger.critical("Не удалось прочитать данные с сервера.")
+        raise requests.RequestException
     soup = BeautifulSoup(response.text, features="lxml")
     valute = soup.find(name="valute", attrs={"id": VALUTE_RCODE})
     value = valute.find(name="value")
@@ -45,10 +43,18 @@ def get_google_order_rep(googlesheet_id):
     result = []
     for item in read_values(service_sheet, googlesheet_id)[1:]:
         if len(item) < 4:
+            logger.warning(
+                "Обнаружена запись с неполным заполнением, для обработки не хватает полей. Запись пропущена без "
+                "сохранения в БД."
+            )
             continue
         created_on = date_converter(item[3])
         if created_on is None:
-            continue  # Залогировать что дату перевести не получилось.
+            logger.warning(
+                f"Обнаружен неизвестный формат даты: {item[3]}. Запись пропущена без сохранения в БД.\n"
+                f"Обрабатываемые данные: {item}"
+            )
+            continue
         result.append(
             {
                 "number": int(item[0]),
@@ -95,6 +101,8 @@ def db_update_from_googlesheets(googlesheet_id=MY_ID):
         google_orders[position]["rub_price"] = course * google_orders[position]["usd_price"]
         change_orders.append(Order(**google_orders[position]))
 
+    if change_orders:
+        logger.info(f"Количество записей подвергающихся изменению: {len(change_orders)}")
     session.add_all(change_orders)
     session.commit()
 

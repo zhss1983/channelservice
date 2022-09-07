@@ -12,7 +12,7 @@ class Order(Base):
     __tablename__ = "orders"
     id = Column(Integer, primary_key=True)
     number = Column(Integer, nullable=False)
-    order = Column(Integer, nullable=False)  # , unique=True
+    order = Column(Integer, nullable=False)
     usd_price = Column(Float, default=0.0, nullable=False)
     created_on = Column(Date, default=date.today, onupdate=date.today)
     rub_price = Column(Float, default=0.0, nullable=False)

@@ -1,3 +1,4 @@
+import datetime
 import os
 from pathlib import Path
 
@@ -20,8 +21,27 @@ else:
 DEBUG = False
 
 POSTGRES_PASSWORD = os.environ["POSTGRES_PASSWORD"]
+TELEGRAM_TOKEN = os.environ["TELEGRAM_TOKEN"]
+CHAT_ID = os.environ["TELEGRAM_CHAT_ID"]
 
 VALUTE_URL = "http://www.cbr.ru/scripts/XML_daily.asp"
 VALUTE_RCODE = "R01235"  # код валюты (см. https://www.cbr.ru/scripts/XML_valFull.asp)
 
 SECOND_UPDATE = 15
+
+LOG_PATH = BASEDIR / "logs"
+
+DATE_FORMATS = (
+    "%d.%m.%Y",
+    "%d.%m.%y",
+    "%d/%m/%Y",
+    "%d/%m/%y",
+    "%d-%m-%Y",
+    "%d-%m-%y",
+    "%d %b %Y",
+    "%d %b %Y",
+)
+
+OVERDUE_TIME = datetime.timedelta(days=90)
+MORNING_SEND_TIME = datetime.time(hour=9, minute=0, second=0)
+EVENING_SEND_TIME = datetime.time(hour=17, minute=0, second=0)
