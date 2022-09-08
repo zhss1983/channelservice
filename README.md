@@ -32,12 +32,6 @@ sudo chmod 755 $DESTINATION
 
 ## Собираем БД.
 
-TELEGRAM_TOKEN=xxxxxxxxxx:YYYYYYYY-zzzzzzzzzzzzzzzzzzzzzzzzzz
-TELEGRAM_CHAT_ID=xxxxxxxxx
-
-
-
-
 Теперь можно и docker-compose.yaml собрать и запустить:
 
 ```/usr/bin/bash
@@ -51,6 +45,8 @@ docker-compose up
 Имя пользователя и базы данных **postgres**, пароль: **lehrjgjg** (так как проект тренировочный, секретками не заморачиваюсь).
 
 ## Тестирование проекта
+
+Перед запуском необходимо заполнить .env файл лежащий в корне проекта. Есть пример .env_example, необходимо поменять буквально пару строк.
 
 ### **Тестовое задание Python**
 
@@ -125,6 +121,13 @@ python task_3.py full
 ```
 
 #### 4. Упаковка решения в docker контейнер и разработка функционала проверки соблюдения «срока поставки».
+
+Для нормальной олтправки сообщений в telegram необходимо дополнить **.env** файл следующими константами:
+
+```
+TELEGRAM_TOKEN=xxxxxxxxxx:YYYYYYYY-zzzzzzzzzzzzzzzzzzzzzzzzzz  # Заменить на свой
+TELEGRAM_CHAT_ID=xxxxxxxxx  # Заменить на свой
+```
 
 Упаковка в контейнер частично выполнена, БД перенесена в контейнер.
 
