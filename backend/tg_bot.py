@@ -6,6 +6,7 @@ bot = telegram.Bot(token=TELEGRAM_TOKEN)
 
 
 def send_message(message):
+    """Отправляет текстовое сообщение message на телеграмм бот. Чат бота указан в CHAT_ID."""
     try:
         bot.send_message(chat_id=CHAT_ID, text=message)
     except telegram.error.NetworkError as error_network:

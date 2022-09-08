@@ -16,7 +16,7 @@ session = requests_cache.CachedSession(
 )
 
 
-def get_course(date: date, session=session):
+def get_course(date: date, session: requests.Session | requests_cache.CachedSession = session):
     """
     Возвращает курс валют по курсу ЦБРФ на указанную дату
     date: дата на которую необходимо получить значение
@@ -32,6 +32,11 @@ def get_course(date: date, session=session):
 
 
 def date_converter(date: str) -> date | None:
+    """
+    Пытается декодировать дату из различных возможных форматов. Форматы задаются через константы DATE_FORMATS
+    :returns:
+        datetime.date or None
+    """
     for format in DATE_FORMATS:
         try:
             return datetime.strptime(date, format).date()
@@ -39,7 +44,20 @@ def date_converter(date: str) -> date | None:
             pass
 
 
-def get_google_order_rep(googlesheet_id):
+def get_google_order_rep_to_dict(
+    googlesheet_id,
+) -> dict["number":int, "order":int, "usd_price":float, "created_on" : datetime.date,]:
+    """
+    Переводит полученные из документа с id=googlesheet_id данные в словарь.
+    :returns:
+           {
+                'number': int,
+                'order': int,
+                'usd_price': float,
+                'created_on': datetime.date,
+            }
+
+    """
     result = []
     for item in read_values(service_sheet, googlesheet_id)[1:]:
         if len(item) < 4:
@@ -67,11 +85,19 @@ def get_google_order_rep(googlesheet_id):
 
 
 def db_update_from_googlesheets(googlesheet_id=MY_ID):
+    """
+    Загружает данные из БД и из Google таблици и сравнивает их на предмет изменения. Все выявленные изменения
+    актуализируются в соответствии с Google таблицей.
+    """
+    # По уму бы взять данные из БД только один раз при старте и далее актуализировать их относительно предыдущего
+    # состояния гугл-таблиц для того что бы не нагружать БД сверх необходимого. Но так как это явно работа с
+    # внутренними документами и она не предпологает больших нагрузок я решил пока оставить как есть (тем более что это
+    # всего лишь тестовое задание).
     session = Session()
 
     active_orders = session.query(Order).filter(Order.is_active).order_by(Order.order)
 
-    google_orders = sorted(get_google_order_rep(googlesheet_id), key=lambda instance: instance["order"])
+    google_orders = sorted(get_google_order_rep_to_dict(googlesheet_id), key=lambda instance: instance["order"])
 
     change_orders, position = [], 0
 

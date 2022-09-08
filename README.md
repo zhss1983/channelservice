@@ -1,5 +1,9 @@
 # channelservice
 
+## Применяемые технологии:
+
+python-telegram-bot, bs4, requests_cach, google-api-python-client, psycopg2-binary, sqlalchemy, python-dotenv
+
 ## Клонирование проекта и запуск:
 
 ```/usr/bin/bash
@@ -27,6 +31,12 @@ sudo chmod 755 $DESTINATION
 ```
 
 ## Собираем БД.
+
+TELEGRAM_TOKEN=xxxxxxxxxx:YYYYYYYY-zzzzzzzzzzzzzzzzzzzzzzzzzz
+TELEGRAM_CHAT_ID=xxxxxxxxx
+
+
+
 
 Теперь можно и docker-compose.yaml собрать и запустить:
 
@@ -123,3 +133,7 @@ python task_3.py full
 python task_3.py overdue
 ```
 При запуске с параметром **"check"** или **"full"** каждый день в **9:00** и в **17:00** будут приходить оповещения в телеграмм оповещение о просроченных заявках. Рабюотает на собственном варианте **Scheduler**-а. С другими пока не работал.
+
+#### Разработка одностраничного web-приложения на основе Django или Flask. Front-end React.
+
+К сожалению это не моё. Написать бэкенд к нему - не вопрос. Передать данные из БД во фронт совершенно не сложно, а вот написать к нему фронт - не смогу, javascript не владею. Мог бы выучить, но не за 2 дня и не на таком уровне что бы писать "single page applications".

@@ -7,6 +7,10 @@ from tg_bot import send_message
 
 
 def check_overdue():
+    """
+    Производит проверку сроков поставок по записям из БД. Результат отправляет их список в телеграмм.
+    Все параметры настраиваются через константы.
+    """
     session = Session()
 
     overdue_time = datetime.date.today() - OVERDUE_TIME

@@ -16,11 +16,16 @@ if os.path.exists("my_id.txt"):
     with open("my_id.txt", "r") as file:
         MY_ID = file.read()
 else:
-    MY_ID = "1Dzlpjq6p4x9a4EW8TDAu4M0Z2ge1AHI1CnXRmCLsleE"
+    MY_ID = "1fhWEawj7DtrfYaqKvxOqD_saP8Nwk38ql2-W3MDg0io"
 
 DEBUG = False
 
 POSTGRES_PASSWORD = os.environ["POSTGRES_PASSWORD"]
+POSTGRES_HOST = os.environ.get("POSTGRES_HOST", "localhost")
+POSTGRES_USERNAME = os.environ["POSTGRES_USERNAME"]
+POSTGRES_PORT = os.environ["POSTGRES_PORT"]
+POSTGRES_DBNAME = os.environ["POSTGRES_DBNAME"]
+
 TELEGRAM_TOKEN = os.environ["TELEGRAM_TOKEN"]
 CHAT_ID = os.environ["TELEGRAM_CHAT_ID"]
 

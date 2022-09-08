@@ -15,14 +15,28 @@ my_id = MY_ID
 
 
 def configure_argument_parser(available_modes):
+    """
+    Конфигурирует модуль парсинга параметров вызова из командной строки.
+    :param available_modes:
+        Перечисление доступных режимов запуска.
+    :return:
+        Возвращает словарь аргументов с которыми была запущена программа.
+        {
+            'mode': str,  # Одно значение из списка available_modes
+            'clear-cache': bool = False,
+        }
+    """
     parser = argparse.ArgumentParser(description="Отслеживание изменений в google таблице:")
     parser.add_argument("mode", choices=available_modes, help="Режимы работы:")
-    parser.add_argument("-c", "--clear-cache", action="store_true", help="Очистка кеша")
-    parser.add_argument("-d", "--debug", action="store_true", default=False, help="Режим отладки")
+    parser.add_argument("-c", "--clear-cache", action="store_false", help="Очистка кеша")
     return parser
 
 
 async def chek():
+    """
+    Запускает бесконечный цикл проверки изменений в google таблицах. Одновременно с этим запускает на выполнение
+    проверку состояния всех объектов класса Scheduler (применяются для выполнения задач по расписанию).
+    """
     while True:
         await morning_check(task=check_overdue)
         await evening_check(task=check_overdue)
@@ -31,11 +45,15 @@ async def chek():
 
 
 def run_check():
+    """
+    Выполняет запуск цикла асинхронной части приложения.
+    """
     logger.info(f"Запущен процесс отслеживания изменений в google таблице с id {my_id}")
     asyncio.run(chek())
 
 
 def run_copy_sheet():
+    """Запускает копирование гугл документа"""
     global my_id
     logger.info(f"Запущен процесс копирования google таблицы.")
     my_id = copy_sheet()
@@ -43,6 +61,7 @@ def run_copy_sheet():
 
 
 def main():
+    """Запускается последовательно копирование документа и отслеживания изменения в нём."""
     try:
         run_copy_sheet()
         run_check()
