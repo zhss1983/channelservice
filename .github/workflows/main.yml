@@ -21,10 +21,9 @@ jobs:
           python -m pip install --upgrade pip
           pip install black flake8 pep8-naming flake8-broken-line flake8-return flake8-isort
 
-#      - name: Test with isort
-#        run: |
-#          python -m isort backend/. --profile black
-#          name: Test with isort
+      - name: Test with isort
+        run: |
+          python -m isort backend/. --profile black
 
       - name: Test with flake8
         run: |
