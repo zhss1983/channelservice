@@ -24,7 +24,6 @@ jobs:
 
       - name: Test with flake8
         run: |
-          cd backend/
           python -m flake8 --max-line-length 120 backend/
 
   send_message:
