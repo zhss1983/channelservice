@@ -29,7 +29,6 @@ jobs:
       - name: Test with flake8
         run: |
           python -m flake8 backend/ --max-line-length=120 --ignore="I001 I005 W503"
-          name: Test with flake8
 
       - name: Install dependencies
         run: |
