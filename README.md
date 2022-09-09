@@ -100,6 +100,8 @@ docker-compose up
 
 ### 1. Копирование гуглл документа:
 
+Самая последняя копия вашего файла на момент публикации находится по **адресу: [https://docs.google.com/spreadsheets/d/1fhWEawj7DtrfYaqKvxOqD_saP8Nwk38ql2-W3MDg0io/edit#gid=0](https://docs.google.com/spreadsheets/d/1fhWEawj7DtrfYaqKvxOqD_saP8Nwk38ql2-W3MDg0io/edit#gid=0)**
+
 Для копирования необходимо выполнить task_1:
 
 ```/usr/bin/bash
