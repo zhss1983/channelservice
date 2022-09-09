@@ -14,6 +14,8 @@ DATE_FORMATS: tuple() - перечисление всех интерпретир
 OVERDUE_TIME: datetime.timedelta(days=90) - время через которое срок заявки/поставки считается просроченным.
 MORNING_SEND_TIME/EVENING_SEND_TIME: datetime.time(hour=9, minute=0, second=0) - время на которое установлено оповещение
 LOGER_FORMATTER - формат вывода логов
+ADMIN_EMAIL - Google почта разработчика
+GUEST_EMAIL - Google почта того кто будет пользоваться документом
 """
 import datetime
 import os
@@ -69,3 +71,6 @@ MORNING_SEND_TIME = datetime.time(hour=9, minute=0, second=0)
 EVENING_SEND_TIME = datetime.time(hour=17, minute=0, second=0)
 
 LOGER_FORMATTER = "%(asctime)s %(levelname)s %(name)s:\t%(message)s"
+
+ADMIN_EMAIL = "zhss1983@gmail.com"
+GUEST_EMAIL = "amkolotov@gmail.com"

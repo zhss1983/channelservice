@@ -41,14 +41,14 @@ def get_list_obj(service: discovery.build) -> dict:
 
 
 # pylint: disable=E1101
-def set_user_permissions(spreadsheet_id, credentials):
+def set_user_permissions(spreadsheet_id, credentials, email):
     """
     Устанавливает разрешения на указанный объект google диска.
     :param spreadsheet_id: id объекта
     :param credentials: объект необходимый для получения прав и работы с сервисными службами google
     :return:
     """
-    permissions_body = {"type": "user", "role": "writer", "emailAddress": "zhss1983@gmail.com"}
+    permissions_body = {"type": "user", "role": "writer", "emailAddress": email}
     drive_service = discovery.build("drive", "v3", credentials=credentials)
     access_permission = drive_service.permissions().create(fileId=spreadsheet_id, body=permissions_body, fields="id")
     access_permission.execute()
