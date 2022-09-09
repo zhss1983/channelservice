@@ -12,13 +12,13 @@
  [PostgreSQL](https://www.postgresql.org/docs/),
  [Docker Compose](https://docs.docker.com/compose/),
  [python-telegram-bot](https://docs.python-telegram-bot.org/en/stable/index.html)[[pdf](https://readthedocs.org/projects/python-telegram-bot/downloads/pdf/stable/)],
- [google-api-python-client](https://code.google.com/archive/p/google-api-python-client/),
- [GitHub Workflows](https://docs.github.com/en/rest/actions/workflows).**
+ [google-api-python-client](https://code.google.com/archive/p/google-api-python-client/).**
 
 Вспомогательные.
 
 **[black](https://black.readthedocs.io/en/stable/),
- [pre-commit](https://pre-commit.com/).**
+ [pre-commit](https://pre-commit.com/),
+ [GitHub Workflows](https://docs.github.com/en/rest/actions/workflows).**
 
 ## Клонирование проекта и запуск:
 
