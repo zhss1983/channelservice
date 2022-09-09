@@ -1,3 +1,4 @@
+"""Реализует отправку сообщений в телеграм-бот."""
 import telegram
 from const import CHAT_ID, TELEGRAM_TOKEN
 from logger import logger
@@ -11,13 +12,16 @@ def send_message(message):
         bot.send_message(chat_id=CHAT_ID, text=message)
     except telegram.error.NetworkError as error_network:
         logger.exception(
-            f'Во время отправки возникла ошибка передачи данных ({error_network}). Cообщение "{message}" в чат не '
-            "передано."
+            'Во время отправки возникла ошибка передачи данных (%s). Cообщение "%s" в чат не передано.',
+            error_network,
+            +message,
         )
     except telegram.error.TelegramError as error_telegram:
         logger.exception(
-            f"При работе с telegram аккаунтом возникла ошибка {error_telegram}. Попытка отправить сообщение "
-            f'"{message}" в чат провалилась.'
+            "При работе с telegram аккаунтом возникла ошибка %s. Попытка отправить сообщение "
+            '"%s" в чат провалилась.',
+            error_telegram,
+            message,
         )
     else:
-        logger.info(f'Отправлено сообщение в чат, текст: "{message}"')
+        logger.info('Отправлено сообщение в чат, текст: "%s"', message)

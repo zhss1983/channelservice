@@ -1,4 +1,5 @@
-from datetime import date, datetime
+"""Задание №2 - проверяет изменения в документе."""
+import datetime
 from http import HTTPStatus
 
 import requests
@@ -11,12 +12,12 @@ from google_api.sheets import read_values
 from logger import logger
 from models import Order
 
-session = requests_cache.CachedSession(
+cached_session = requests_cache.CachedSession(
     cache_name="valute_cache", backend="sqlite", filter_fn=lambda response: response.status_code == HTTPStatus.OK
 )
 
 
-def get_course(date: date, session: requests.Session | requests_cache.CachedSession = session):
+def get_course(date: datetime.date, session: requests.Session | requests_cache.CachedSession = cached_session):
     """
     Возвращает курс валют по курсу ЦБРФ на указанную дату
     date: дата на которую необходимо получить значение
@@ -31,22 +32,21 @@ def get_course(date: date, session: requests.Session | requests_cache.CachedSess
     return float(value.text.replace(",", "."))
 
 
-def date_converter(date: str) -> date | None:
+def date_converter(date: str) -> datetime.date | None:
     """
     Пытается декодировать дату из различных возможных форматов. Форматы задаются через константы DATE_FORMATS
     :returns:
         datetime.date or None
     """
-    for format in DATE_FORMATS:
+    for format_method in DATE_FORMATS:
         try:
-            return datetime.strptime(date, format).date()
+            return datetime.datetime.strptime(date, format_method).date()
         except ValueError:
             pass
+    return None
 
 
-def get_google_order_rep_to_dict(
-    googlesheet_id,
-) -> dict["number":int, "order":int, "usd_price":float, "created_on" : datetime.date,]:
+def get_google_order_rep_to_dict(googlesheet_id) -> dict[int, int, float, datetime.date]:
     """
     Переводит полученные из документа с id=googlesheet_id данные в словарь.
     :returns:
@@ -56,7 +56,6 @@ def get_google_order_rep_to_dict(
                 'usd_price': float,
                 'created_on': datetime.date,
             }
-
     """
     result = []
     for item in read_values(service_sheet, googlesheet_id)[1:]:
@@ -69,8 +68,10 @@ def get_google_order_rep_to_dict(
         created_on = date_converter(item[3])
         if created_on is None:
             logger.warning(
-                f"Обнаружен неизвестный формат даты: {item[3]}. Запись пропущена без сохранения в БД.\n"
-                f"Обрабатываемые данные: {item}"
+                "Обнаружен неизвестный формат даты: %s. Запись пропущена без сохранения в БД.\n"
+                "Обрабатываемые данные: %s",
+                item[3],
+                item,
             )
             continue
         result.append(
@@ -84,7 +85,8 @@ def get_google_order_rep_to_dict(
     return result
 
 
-def db_update_from_googlesheets(googlesheet_id=MY_ID):
+# pylint: disable=R0912
+def db_update_from_googlesheets(googlesheet_id: str):
     """
     Загружает данные из БД и из Google таблици и сравнивает их на предмет изменения. Все выявленные изменения
     актуализируются в соответствии с Google таблицей.
@@ -128,10 +130,10 @@ def db_update_from_googlesheets(googlesheet_id=MY_ID):
         change_orders.append(Order(**google_orders[position]))
 
     if change_orders:
-        logger.info(f"Количество записей подвергающихся изменению: {len(change_orders)}")
+        logger.info("Количество записей подвергающихся изменению: %s", len(change_orders))
     session.add_all(change_orders)
     session.commit()
 
 
 if __name__ == "__main__":
-    db_update_from_googlesheets()
+    db_update_from_googlesheets(MY_ID)

@@ -1,3 +1,4 @@
+"""Рализует функции для работы с Google таблицами."""
 from google_api.const import READ_GOOGLESHEET_RANGHE
 
 

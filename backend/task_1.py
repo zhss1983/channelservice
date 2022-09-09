@@ -1,3 +1,4 @@
+"""Задание №1. Копирует файл, выдаёт права."""
 from const import COPY_ID, GOOGLE_DOC
 from google_api.drive import auth_drive, clear_disk, copy_obj, get_list_obj, set_user_permissions
 from logger import logger
@@ -18,9 +19,9 @@ def copy_sheet():
     clear(service)  # Для решения нужно ли это делать необходима консультация.
     task_obj = copy_obj(service, COPY_ID)
     set_user_permissions(task_obj["id"], credentials)
-    logger.info(f'Скопирована google таблица, адрес: {GOOGLE_DOC}{task_obj["id"]}/edit#gid=0')
+    logger.info("Скопирована google таблица, адрес: %s%s/edit#gid=0", GOOGLE_DOC, task_obj["id"])
 
-    with open("my_id.txt", "w") as file:
+    with open("my_id.txt", "w", encoding="utf-8") as file:
         file.write(task_obj["id"])
         logger.info("id google таблицы сохранён на диск в файл ./my_id.txt")
 

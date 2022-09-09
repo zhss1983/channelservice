@@ -1,3 +1,4 @@
+"""Запуск дополнительного 4 задания. Проверка просроченных поставок и отправка результата проверки в telegram."""
 import datetime
 
 from const import OVERDUE_TIME
@@ -19,10 +20,10 @@ def check_overdue():
     )
 
     if overdue_orders.count() == 0:
-        send_message(f"На текущую дату не имеется просроченных поставок.")
+        send_message("На текущую дату не имеется просроченных поставок.")
         return
 
-    message = [f"У вас имеется просроченные поставки:\n"]
+    message = ["У вас имеется просроченные поставки:\n"]
     rub = usd = 0
     for order in overdue_orders:
         rub += order.rub_price

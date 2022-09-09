@@ -1,3 +1,4 @@
+"""Формирует модель Order для работы с БД."""
 from datetime import date
 
 from db_access import engine
@@ -8,6 +9,7 @@ Base = declarative_base()
 
 
 class Order(Base):
+    """Модель для сохроанения заказов/заявок в БД."""
 
     __tablename__ = "orders"
     id = Column(Integer, primary_key=True)
@@ -19,7 +21,7 @@ class Order(Base):
     is_active = Column(Boolean, default=True, nullable=False)
 
     def __repr__(self):
-        return "<Order %r, created %r>" % (self.order, self.created_on)
+        return f"<Order {self.order}, created {self.created_on}>"
 
     def is_same(
         self,

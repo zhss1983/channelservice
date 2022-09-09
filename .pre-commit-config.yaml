@@ -30,4 +30,4 @@ repos:
       entry: pylint
       language: system
       types: [python]
-      args: [ -j=0, --max-line-length=120, src/]
+      args: [ backend/, -j=0, --max-line-length=120, --disable=R0801, --init-hook="import sys; sys.path.append('backend')"]

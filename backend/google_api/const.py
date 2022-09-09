@@ -1,3 +1,8 @@
+"""
+SCOPES - Список необходимых для работы с Google Api прав.
+CREDENTIALS_INFO - данные необходимые для входа на сервер
+READ_GOOGLESHEET_RANGHE = "A1:Z1000" - Диапазон для чтения google таблиц
+"""
 import os
 
 from dotenv import load_dotenv

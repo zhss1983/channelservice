@@ -1,3 +1,4 @@
+"""Подключение к БД."""
 from const import POSTGRES_DBNAME, POSTGRES_HOST, POSTGRES_PASSWORD, POSTGRES_PORT, POSTGRES_USERNAME
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker

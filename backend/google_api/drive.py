@@ -1,3 +1,4 @@
+"""Рализует функции для работы с Google диском."""
 from google.oauth2.service_account import Credentials
 from google_api.const import CREDENTIALS_INFO, SCOPES
 from googleapiclient import discovery
@@ -39,6 +40,7 @@ def get_list_obj(service: discovery.build) -> dict:
     return response.execute()
 
 
+# pylint: disable=E1101
 def set_user_permissions(spreadsheet_id, credentials):
     """
     Устанавливает разрешения на указанный объект google диска.
@@ -53,11 +55,13 @@ def set_user_permissions(spreadsheet_id, credentials):
 
 
 def clear_disk(service, spreadsheets):
+    """Удаляет все файлы присланны в списке spreadsheets"""
     for spreadsheet in spreadsheets:
         response = service.files().delete(fileId=spreadsheet["id"])
         response.execute()
 
 
-def copy_obj(service, fileId):
-    response = service.files().copy(fileId=fileId)
+def copy_obj(service, file_id):
+    """Копирует файл с Google диска, с id = file_id"""
+    response = service.files().copy(fileId=file_id)
     return response.execute()
