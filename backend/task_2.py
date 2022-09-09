@@ -13,11 +13,16 @@ from logger import logger
 from models import Order
 
 cached_session = requests_cache.CachedSession(
-    cache_name="valute_cache", backend="sqlite", filter_fn=lambda response: response.status_code == HTTPStatus.OK
+    cache_name="valute_cache",
+    backend="sqlite",
+    filter_fn=lambda response: response.status_code == HTTPStatus.OK,
 )
 
 
-def get_course(date: datetime.date, session: requests.Session | requests_cache.CachedSession = cached_session):
+def get_course(
+    date: datetime.date,
+    session: requests.Session | requests_cache.CachedSession = cached_session,
+):
     """
     Возвращает курс валют по курсу ЦБРФ на указанную дату
     date: дата на которую необходимо получить значение
@@ -46,7 +51,9 @@ def date_converter(date: str) -> datetime.date | None:
     return None
 
 
-def get_google_order_rep_to_dict(googlesheet_id) -> dict[int, int, float, datetime.date]:
+def get_google_order_rep_to_dict(
+    googlesheet_id,
+) -> dict[int, int, float, datetime.date]:
     """
     Переводит полученные из документа с id=googlesheet_id данные в словарь.
     :returns:
@@ -95,7 +102,10 @@ def db_update_from_googlesheets(googlesheet_id: str):
 
     active_orders = session.query(Order).filter(Order.is_active).order_by(Order.order)
 
-    google_orders = sorted(get_google_order_rep_to_dict(googlesheet_id), key=lambda instance: instance["order"])
+    google_orders = sorted(
+        get_google_order_rep_to_dict(googlesheet_id),
+        key=lambda instance: instance["order"],
+    )
 
     change_orders, position = [], 0
 
