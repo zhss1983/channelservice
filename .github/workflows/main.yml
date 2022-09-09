@@ -22,9 +22,18 @@ jobs:
           pip install flake8 pep8-naming flake8-broken-line flake8-return flake8-isort
           pip install -r backend/requirements.txt
 
+      - name: Test with isort
+        run: |
+          python -m isort
+          name: Test with flake8
+          args: ["backend/", "--profile", "black"]
+
       - name: Test with flake8
         run: |
-          python -m flake8 --max-line-length 120 backend/
+          python -m flake8
+          name: Test with flake8
+          args: ["backend/", "--profile", "black", "--max-line-length 120", "--ignore I001", "--ignore I005"]
+
 
   send_message:
     runs-on: ubuntu-latest
