@@ -6,6 +6,7 @@ from db_access import Session
 
 session = Session()
 
+
 # pylint: disable=R0903
 class Scheduler:
     """Объект для установки таймера вызова функции. Требует запуска в бесконечном асинхронном цикле."""
