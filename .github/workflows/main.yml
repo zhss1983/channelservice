@@ -25,8 +25,8 @@ jobs:
       - name: Test with isort
         run: |
           python -m isort
-          name: Test with flake8
-          args: ["backend/", "--profile", "black"]
+          name: Test with isort
+          args: ["backend", "--profile black"]
 
       - name: Test with flake8
         run: |
