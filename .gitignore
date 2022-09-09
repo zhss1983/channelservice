@@ -132,7 +132,6 @@ dmypy.json
 
 # main exclusions
 keys/
-flask_sqlalchemi/
 pgadmin/
 pgdata/
 postgresql/
